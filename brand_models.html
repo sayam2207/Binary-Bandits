@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Models - Car Tuning Garage</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  
+  <!-- Simple Authentication - NO FIREBASE -->
+  <style>
+    /* Brand Models Page Styles */
+    * {
+      cursor: none !important;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    .brand-logo-large {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.8;
+      margin: 0;
+    }
+
+    .models-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .model-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .model-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .model-card:hover::before {
+      left: 100%;
+    }
+
+    .model-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .model-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(45deg, #333, #555);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .model-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+    }
+
+    .model-info {
+      padding: 1.5rem;
+    }
+
+    .model-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      color: #fff;
+    }
+
+    .model-year {
+      font-size: 1rem;
+      opacity: 0.7;
+      margin: 0 0 1rem 0;
+    }
+
+    .model-description {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin: 0 0 1rem 0;
+      line-height: 1.4;
+    }
+
+    .model-specs {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .spec {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .spec-value {
+      color: #4ecdc4;
+      font-weight: 600;
+    }
+
+    .model-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+      border: none;
+      border-radius: 10px;
+      padding: 0.8rem;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .back-button {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      padding: 1rem 1.5rem;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-5px);
+    }
+
+    .cursor {
+      width: 40px;
+      height: 40px;
+      background: url('images/flag.png') no-repeat center center;
+      background-size: contain;
+      position: fixed;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid #4ecdc4;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Brand-specific colors */
+    .brand-bmw .brand-logo-large { background: linear-gradient(45deg, #0066cc, #003d7a); }
+    .brand-audi .brand-logo-large { background: linear-gradient(45deg, #bb0a30, #8b0000); }
+    .brand-mercedes .brand-logo-large { background: linear-gradient(45deg, #00adef, #0066cc); }
+    .brand-toyota .brand-logo-large { background: linear-gradient(45deg, #eb0a1e, #c41e3a); }
+    .brand-nissan .brand-logo-large { background: linear-gradient(45deg, #c41e3a, #8b0000); }
+    .brand-lamborghini .brand-logo-large { background: linear-gradient(45deg, #ffd700, #ff8c00); }
+    .brand-ferrari .brand-logo-large { background: linear-gradient(45deg, #dc143c, #8b0000); }
+    .brand-porsche .brand-logo-large { background: linear-gradient(45deg, #000000, #333333); }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .header p {
+        font-size: 1rem;
+      }
+      
+      .brand-logo-large {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+      }
+      
+      .models-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .model-card {
+        margin: 0 1rem;
+      }
+      
+      .back-button {
+        top: 1rem;
+        left: 1rem;
+        padding: 0.8rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor"></div>
+  
+  <a href="brand_selection.html" class="back-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back to Brands</span>
+  </a>
+
+  <div class="header" id="brandHeader">
+    <div class="brand-logo-large" id="brandLogo">🚗</div>
+    <h1 id="brandName">Brand Models</h1>
+    <p id="brandDescription">Select a model to start tuning</p>
+  </div>
+
+  <div class="models-container">
+    <div class="models-grid" id="modelsGrid">
+      <!-- Models will be populated by JavaScript -->
+    </div>
+  </div>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <script>
+    // Custom cursor movement
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    // Car models data by brand with actual car images
+    const carModels = {
+      bmw: [
+        {
+          id: 'bmw-m4-f82',
+          name: 'BMW M4 F82',
+          year: '2014-2020',
+          description: 'High-performance coupe with twin-turbo inline-6 engine',
+          image: 'images/logo.png', // Using logo.png for BMW M4
+          specs: {
+            'Engine': '3.0L Twin-Turbo I6',
+            'Power': '425 HP',
+            'Torque': '406 lb-ft',
+            '0-60': '4.1s'
+          },
+          modelFile: 'models/f82.glb'
+        },
+        {
+          id: 'bmw-m8-competition',
+          name: 'BMW M8 Competition',
+          year: '2019-Present',
+          description: 'Luxury grand tourer with V8 power and all-wheel drive',
+          image: 'images/logo.png', // Using logo.png for BMW M8
+          specs: {
+            'Engine': '4.4L Twin-Turbo V8',
+            'Power': '617 HP',
+            'Torque': '553 lb-ft',
+            '0-60': '3.0s'
+          },
+          modelFile: 'models/m8.glb'
+        },
+        {
+          id: 'bmw-m3-g80',
+          name: 'BMW M3 G80',
+          year: '2021-Present',
+          description: 'Latest generation M3 with xDrive all-wheel drive',
+          image: 'images/logo.png', // Using logo.png for BMW M3
+          specs: {
+            'Engine': '3.0L Twin-Turbo I6',
+            'Power': '473 HP',
+            'Torque': '406 lb-ft',
+            '0-60': '3.8s'
+          },
+          modelFile: 'models/m3.glb'
+        }
+      ],
+      audi: [
+        {
+          id: 'audi-r8',
+          name: 'Audi R8',
+          year: '2006-Present',
+          description: 'Mid-engine supercar with V10 power and quattro AWD',
+          image: 'images/audi.jpg',
+          specs: {
+            'Engine': '5.2L V10',
+            'Power': '562 HP',
+            'Torque': '398 lb-ft',
+            '0-60': '3.2s'
+          },
+          modelFile: 'models/r8.glb'
+        },
+        {
+          id: 'audi-rs6',
+          name: 'Audi RS6 Avant',
+          year: '2019-Present',
+          description: 'High-performance wagon with twin-turbo V8',
+          image: 'images/audi.jpg',
+          specs: {
+            'Engine': '4.0L Twin-Turbo V8',
+            'Power': '591 HP',
+            'Torque': '590 lb-ft',
+            '0-60': '3.6s'
+          },
+          modelFile: 'models/rs6.glb'
+        }
+      ],
+      mercedes: [
+        {
+          id: 'mercedes-amg-gt',
+          name: 'Mercedes-AMG GT',
+          year: '2014-Present',
+          description: 'Front-engine sports car with handcrafted AMG V8',
+          image: 'images/logo.png', // Using logo.png for Mercedes AMG GT
+          specs: {
+            'Engine': '4.0L Twin-Turbo V8',
+            'Power': '469 HP',
+            'Torque': '465 lb-ft',
+            '0-60': '3.9s'
+          },
+          modelFile: 'models/amg-gt.glb'
+        }
+      ],
+      toyota: [
+        {
+          id: 'toyota-supra',
+          name: 'Toyota Supra',
+          year: '2019-Present',
+          description: 'Legendary sports car reborn with BMW partnership',
+          image: 'images/supra.png',
+          specs: {
+            'Engine': '3.0L Twin-Turbo I6',
+            'Power': '382 HP',
+            'Torque': '368 lb-ft',
+            '0-60': '3.9s'
+          },
+          modelFile: 'models/supra.glb'
+        }
+      ],
+      nissan: [
+        {
+          id: 'nissan-gtr-r34',
+          name: 'Nissan GT-R R34',
+          year: '1999-2002',
+          description: 'Legendary Skyline GT-R with twin-turbo inline-6',
+          image: 'images/nissan.jpg',
+          specs: {
+            'Engine': '2.6L Twin-Turbo I6',
+            'Power': '276 HP',
+            'Torque': '289 lb-ft',
+            '0-60': '4.9s'
+          },
+          modelFile: 'models/r34.glb'
+        },
+        {
+          id: 'nissan-silvia-s14',
+          name: 'Nissan Silvia S14',
+          year: '1993-1998',
+          description: 'Drift legend with turbocharged inline-4 engine',
+          image: 'images/nissan.jpg',
+          specs: {
+            'Engine': '2.0L Turbo I4',
+            'Power': '205 HP',
+            'Torque': '203 lb-ft',
+            '0-60': '6.5s'
+          },
+          modelFile: 'models/s14.glb'
+        },
+        {
+          id: 'nissan-silvia-s15',
+          name: 'Nissan Silvia S15',
+          year: '1999-2002',
+          description: 'Final generation Silvia with improved aerodynamics',
+          image: 'images/nissan.jpg',
+          specs: {
+            'Engine': '2.0L Turbo I4',
+            'Power': '247 HP',
+            'Torque': '203 lb-ft',
+            '0-60': '5.8s'
+          },
+          modelFile: 'models/s15.glb'
+        }
+      ],
+      lamborghini: [
+        {
+          id: 'lamborghini-gallardo',
+          name: 'Lamborghini Gallardo',
+          year: '2003-2013',
+          description: 'Entry-level supercar with V10 engine and AWD',
+          image: 'images/lambo.jpg',
+          specs: {
+            'Engine': '5.2L V10',
+            'Power': '562 HP',
+            'Torque': '398 lb-ft',
+            '0-60': '3.4s'
+          },
+          modelFile: 'models/gallardo.glb'
+        },
+        {
+          id: 'lamborghini-huracan',
+          name: 'Lamborghini Huracán',
+          year: '2014-Present',
+          description: 'Successor to Gallardo with advanced aerodynamics',
+          image: 'images/lambo.jpg',
+          specs: {
+            'Engine': '5.2L V10',
+            'Power': '602 HP',
+            'Torque': '413 lb-ft',
+            '0-60': '3.2s'
+          },
+          modelFile: 'models/huracan.glb'
+        }
+      ],
+      ferrari: [
+        {
+          id: 'ferrari-488',
+          name: 'Ferrari 488 GTB',
+          year: '2015-2019',
+          description: 'Mid-engine supercar with twin-turbo V8',
+          image: 'images/logo.png', // Using logo.png for Ferrari
+          specs: {
+            'Engine': '3.9L Twin-Turbo V8',
+            'Power': '661 HP',
+            'Torque': '561 lb-ft',
+            '0-60': '3.0s'
+          },
+          modelFile: 'models/488.glb'
+        }
+      ],
+      porsche: [
+        {
+          id: 'porsche-911',
+          name: 'Porsche 911',
+          year: '1963-Present',
+          description: 'Iconic sports car with rear-engine layout',
+          image: 'images/logo.png', // Using logo.png for Porsche
+          specs: {
+            'Engine': '3.0L Twin-Turbo H6',
+            'Power': '379 HP',
+            'Torque': '331 lb-ft',
+            '0-60': '4.2s'
+          },
+          modelFile: 'models/911.glb'
+        }
+      ]
+    };
+
+    // Brand information with actual logos
+    const brandInfo = {
+      bmw: {
+        name: 'BMW',
+        description: 'Bayerische Motoren Werke - The Ultimate Driving Machine',
+        logo: 'images/logo.png',
+        color: 'brand-bmw'
+      },
+      audi: {
+        name: 'Audi',
+        description: 'Vorsprung durch Technik - Progress through Technology',
+        logo: 'images/audi.jpg',
+        color: 'brand-audi'
+      },
+      mercedes: {
+        name: 'Mercedes-Benz',
+        description: 'The Best or Nothing - Luxury and Performance',
+        logo: 'images/logo.png',
+        color: 'brand-mercedes'
+      },
+      toyota: {
+        name: 'Toyota',
+        description: 'Let\'s Go Places - Reliability and Innovation',
+        logo: 'images/supra.png',
+        color: 'brand-toyota'
+      },
+      nissan: {
+        name: 'Nissan',
+        description: 'Innovation that Excites - Japanese Engineering',
+        logo: 'images/nissan.jpg',
+        color: 'brand-nissan'
+      },
+      lamborghini: {
+        name: 'Lamborghini',
+        description: 'Expect the Unexpected - Italian Supercars',
+        logo: 'images/lambo.jpg',
+        color: 'brand-lamborghini'
+      },
+      ferrari: {
+        name: 'Ferrari',
+        description: 'Passion for Excellence - Racing Heritage',
+        logo: 'images/logo.png',
+        color: 'brand-ferrari'
+      },
+      porsche: {
+        name: 'Porsche',
+        description: 'There is no Substitute - German Precision',
+        logo: 'images/logo.png',
+        color: 'brand-porsche'
+      }
+    };
+
+    // Get brand from URL parameter
+    function getBrandFromURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('brand') || localStorage.getItem('selectedBrand') || 'bmw';
+    }
+
+    // Initialize page
+    function initializePage() {
+      const brandId = getBrandFromURL();
+      const brand = brandInfo[brandId];
+      const models = carModels[brandId];
+
+      if (!brand || !models) {
+        console.error('Brand or models not found:', brandId);
+        return;
+      }
+
+      // Update header
+      document.getElementById('brandLogo').innerHTML = `<img src="${brand.logo}" alt="${brand.name} Logo" style="width: 100%; height: 100%; object-fit: contain;">`;
+      document.getElementById('brandName').textContent = brand.name;
+      document.getElementById('brandDescription').textContent = brand.description;
+      document.getElementById('brandHeader').className = `header ${brand.color}`;
+
+      // Populate models
+      populateModels(models);
+    }
+
+    // Populate models grid
+    function populateModels(models) {
+      const modelsGrid = document.getElementById('modelsGrid');
+      modelsGrid.innerHTML = '';
+
+      models.forEach(model => {
+        const modelCard = document.createElement('div');
+        modelCard.className = 'model-card';
+        modelCard.setAttribute('data-model', model.id);
+
+        modelCard.innerHTML = `
+          <div class="model-image">
+            <img src="${model.image}" alt="${model.name}" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>
+          <div class="model-info">
+            <h3 class="model-name">${model.name}</h3>
+            <p class="model-year">${model.year}</p>
+            <p class="model-description">${model.description}</p>
+            <div class="model-specs">
+              ${Object.entries(model.specs).map(([key, value]) => `
+                <div class="spec">
+                  <span>${key}</span>
+                  <span class="spec-value">${value}</span>
+                </div>
+              `).join('')}
+            </div>
+            <div class="model-actions">
+              <button class="btn-primary" onclick="selectModelWithAuth('${model.id}', '${model.name}', '${model.modelFile}')">
+                <i class="fas fa-wrench"></i> Start Tuning
+              </button>
+              <button class="btn-secondary" onclick="viewDetails('${model.id}')">
+                <i class="fas fa-info"></i>
+              </button>
+            </div>
+          </div>
+        `;
+
+        modelsGrid.appendChild(modelCard);
+      });
+    }
+
+    // Handle model selection
+    function selectModel(modelId, modelName, modelFile) {
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'flex';
+
+      // Store selected model data
+      localStorage.setItem('selectedCar', modelName);
+      localStorage.setItem('selectedModel', modelFile);
+      localStorage.setItem('selectedModelId', modelId);
+
+      // Simulate loading time
+      setTimeout(() => {
+        // Redirect to tuning page
+        window.location.href = 'tuning page.html';
+      }, 1000);
+    }
+
+    // View model details
+    function viewDetails(modelId) {
+      alert(`Details for ${modelId} coming soon!`);
+    }
+
+    // Initialize page when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initializePage);
+  </script>
+  
+  <script src="js/simple-auth-no-firebase.js"></script>
+  <script src="js/brand-models.js"></script>
+</body>
+</html>

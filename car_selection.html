@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Your Car</title>
+  <link rel="stylesheet" href="css/responsive.css"/>
+  <style>
+    /* Har jagah default cursor hide */
+* {
+  cursor: none !important;
+}
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #1a1a1a;
+      color: #fff;
+      margin: 0;
+      padding: 2rem;
+    }
+    .car-selection {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    .car-card {
+      background: #222;
+      border-radius: 10px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .car-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(255,140,0,0.5);
+    }
+    .car-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+    }
+    .car-card p {
+      text-align: center;
+      padding: 0.5rem;
+    }
+    .modal {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.7);
+      display:none;
+      justify-content:center;
+      align-items:center;
+    }
+    .modal-content {
+      background: #2a2a2a;
+      padding:2rem;
+      border-radius:10px;
+      text-align:center;
+    }
+    .modal-content button {
+      margin-top:1rem;
+      padding:0.6rem 1.2rem;
+      background:#ff8c00;
+      border:none;
+      border-radius:5px;
+      color:#fff;
+      cursor:pointer;
+    }
+    .cursor {
+  width: 40px;  
+  height: 40px;
+  background: url('images/flag.png') no-repeat center center;
+  background-size: contain;
+  position: fixed;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+a, button {
+  cursor: none !important; /* taki default cursor na dikhe */
+}
+
+.back-button {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  padding: 1rem 1.5rem;
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-5px);
+}
+
+  </style>
+</head>
+<body>
+  <div class="cursor"></div>
+  
+  <a href="brand_selection.html" class="back-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back to Brands</span>
+  </a>
+
+  <div class="car-selection" id="carSelection">
+    <div class="car-card" data-car="Audi R8">
+      <img src="images/audi.jpg" alt="Audi R8">
+      <p>Audi R8</p>
+    </div>
+    <div class="car-card" data-car="Lamborghini Gallardo">
+      <img src="images/lambo.jpg" alt="Lamborghini Gallardo">
+      <p>Lamborghini Gallardo</p>
+    </div>
+    <div class="car-card" data-car="Nissan Silvia S14">
+      <img src="images/nissan.jpg" alt="Nissan Silvia S14">
+      <p>Nissan Silvia S14</p>
+    </div>
+
+    <div class="car-card" data-car="Nissan Silvia S15">
+      <img src="/images/s15.jpeg" alt="Nissan Silvia S15">
+      <p>Nissan Silvia S15</p>
+    </div>
+
+    <div class="car-card" data-car="BMW M4 F82">
+      <img src="/images/f82.jpeg" alt="BMW M4 F82">
+      <p>BMW M4 F82</p>
+    </div>
+
+    <div class="car-card" data-car="BMW M8 Competition">
+      <img src="/images/m8.jpeg" alt="BMW M8 Competition">
+      <p>BMW M8 Competition</p>
+    </div>
+
+    <div class="car-card" data-car="Toyota Supra">
+      <img src="/images/supra.jpeg" alt="Toyota Supra">
+      <p>Toyota Supra</p>
+    </div>
+
+    <div class="car-card" data-car="Nissan GTR R34">
+      <img src="/images/r34.jpeg" alt="Nissan GTR R34">
+      <p>Nissan GTR R34</p>
+    </div>
+  </div>
+
+  <div class="modal" id="carModal">
+    <div class="modal-content">
+      <h2 id="selectedCar">Selected Car</h2>
+      <button onclick="goToTuning()">Continue</button>
+    </div>
+  </div>
+<script>
+  const cursor = document.querySelector('.cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+</script>
+<script>
+const carConfigs = {
+  "Audi R8": {
+    model: "/models/r8.glb",
+    paintMaterials: ["Body_Paint", "Mirror_Paint"]
+  },
+  "Lamborghini Gallardo": {
+    model: "/models/gallardo.glb",
+    paintMaterials: ["gallardoVehicle_Exterior_mm_ext1","gallardoVehicle_Exterior_mm_cab1"]
+  },
+  "Nissan Silvia S14": {
+    model: "/models/s14.glb",
+    paintMaterials: ["Car_Body"]
+  },
+  "Nissan Silvia S15": {
+    model: "/models/s15.glb",
+    paintMaterials: ["Car_Body"]
+  },
+  "BMW M4 F82": {
+    model: "/models/f82.glb",
+    paintMaterials: ["Car_Body"]
+  },
+  "BMW M8 Competition": {
+    model: "/models/m8.glb",
+    paintMaterials: ["Car_Body"]
+  },
+  "Toyota Supra": {
+    model: "/models/supra.glb",
+    paintMaterials: ["Car_Body"]
+  },
+  "Nissan GTR R34": {
+    model: "/models/r34.glb",
+    paintMaterials: ["Car_Body"]
+  }
+};
+
+const modal = document.getElementById('carModal');
+const selectedCarEl = document.getElementById('selectedCar');
+const cars = document.querySelectorAll('.car-card');
+let selectedCar = '';
+
+cars.forEach(card => {
+  card.addEventListener('click', () => {
+    selectedCar = card.dataset.car;
+    selectedCarEl.textContent = `Selected: ${selectedCar}`;
+    modal.style.display = 'flex';
+  });
+});
+
+function goToTuning(){
+  if (!selectedCar) {
+    alert("Please select a car.");
+    return;
+  }
+  const config = carConfigs[selectedCar];
+  if (!config) {
+    alert("Model config not found!");
+    return;
+  }
+  localStorage.setItem('selectedCar', selectedCar);
+  localStorage.setItem('selectedModel', config.model);
+  localStorage.setItem('targetMaterials', JSON.stringify(config.paintMaterials));
+  window.location.href = "tuning page.html";
+}
+
+window.addEventListener('click', e => {
+  if (e.target === modal) modal.style.display = 'none';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tunners2</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+<link rel="stylesheet" href="homepage.css"/>
+</head>
+<body>
+<main class="background">
+  <!-- Background video (hidden until Start clicked) -->
+  <video id="bgVideo">
+    <source src="images/background.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <header>
+    <h1>Tune Your Favorite Cars</h1>
+  </header>
+ 
+  <nav class="profile-wrapper">
+    <button class="profile-photo" onclick="toggleSidebar()" aria-label="Open user sidebar">
+      <i class="fa fa-user fa-2x"></i>
+    </button>
+  </nav>
+
+  <div class="cursor"></div>
+  
+  <section class="button-container">
+    <button id="playButton" onclick="startVideoAndRedirect()">
+      <img src="images/start.png" alt="start button">
+    </button>
+  </section>
+</main>
+
+<aside>
+  <nav id="sidebar" class="sidebar">
+    <button class="close-btn" onclick="toggleSidebar()" aria-label="Close sidebar">&times;</button>
+    <ul style="list-style:none;padding:0;">
+      <li><a href="#userinfo">Username Info</a></li>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Projects</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="#tutorial">Tutorial</a></li>
+      <li><a href="#">Log out</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<footer>
+  &copy; 2025 Tunners. All rights reserved.
+</footer>
+
+<script>
+   // Custom cursor
+   const cursor = document.querySelector('.cursor');
+   document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+   });
+
+   function startVideoAndRedirect() {
+     const button = document.getElementById("playButton");
+     const bgVideo = document.getElementById("bgVideo");
+
+     button.style.display = "none";   // hide start button
+     bgVideo.style.display = "block"; // show video
+     bgVideo.currentTime = 0;         // restart video
+     bgVideo.muted = false;           // ensure sound
+     bgVideo.play();
+
+     // Redirect when video ends
+     bgVideo.onended = function() {
+       window.location.href = "brand_selection.html";
+     };
+   }
+
+   function toggleSidebar() {
+     document.getElementById('sidebar').classList.toggle('active');
+   }
+</script>
+</body>
+</html>

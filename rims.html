@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rims Page</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Poppins, sans-serif;
+      background: #121212;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+       
+
+.main-view {
+  flex: 1;
+  display: flex;
+  flex-direction: row; /* Horizontal layout */
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.model-container {
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#rimsPreview.rims-preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-left: 1px solid rgba(255,255,255,0.1);
+  height: 100%;
+  overflow-y: auto;
+}
+
+
+model-viewer {
+  width: 1000px;
+  height: 810px;
+  background: transparent;
+  z-index: 1;
+}
+
+.rims-3d-container {
+  display: none; /* Hidden initially */
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 2rem;
+}
+
+
+.rim-3d-item {
+  text-align: center;
+}
+
+.rim-3d-item model-viewer {
+  width: 300px;
+  height: 200px;
+  background: transparent;
+  border: 1px solid #444;
+  border-radius: 12px;
+}
+
+.rim-3d-item p {
+  margin-top: 8px;
+  font-size: 16px;
+  color: #ccc;
+}
+.rim-brands {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 20px;
+}
+
+.rim-brands button {
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  transition: transform 0.3s;
+}
+
+.rim-brands button:hover {
+  transform: scale(1.05);
+}
+
+.rim-brands img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 5px;
+}
+
+
+
+  </style>
+</head>
+<body>
+<div class="bg">
+<div class="main-view">
+  <!-- Car model in center -->
+  <div class="model-container">
+    <model-viewer id="carModel"
+      src=""
+      alt="Selected Car"
+      camera-controls
+      auto-rotate
+      shadow-intensity="1">
+    </model-viewer>
+  </div>
+
+  <!-- Rims Preview on the right -->
+  <div id="rimsPreview" ></div>
+
+  <!-- WORK Rims -->
+<div class="rims-3d-container" id="rims-work">
+  <div class="rim-3d-item">
+    <model-viewer src="/Rims/Work/meister.glb" camera-controls auto-rotate></model-viewer>
+    <p>Work Meister</p>
+  </div>
+  <div class="rim-3d-item">
+    <model-viewer src="/Rims/Work/equip 5.glb" camera-controls auto-rotate></model-viewer>
+  </div>
+  <div class="rim-3d-item">
+    <model-viewer src="/Rims/Work/vs-xx.glb" camera-controls auto-rotate></model-viewer>
+  </div>
+  
+</div>
+
+<!-- BBS Rims -->
+<div class="rims-3d-container" id="rims-bbs">
+  <div class="rim-3d-item">
+    <model-viewer src="/Rims/BBS/lm.glb" camera-controls auto-rotate></model-viewer>
+  </div>
+  <div class="rim-3d-item">
+    <model-viewer src="/Rims/BBS/rs16.glb" camera-controls auto-rotate></model-viewer>    
+  </div>
+</div>
+
+<!-- Enkei Rims -->
+<div class="rims-3d-container" id="rims-enkei">
+  <div class="rim-3d-item">
+    <model-viewer src="/Rims/Enkei/nt03.glb" camera-controls auto-rotate></model-viewer>
+  </div>
+  
+</div>
+
+</div>
+
+<div id="rimsPreview" style="display: flex; flex-direction: column; gap: 1rem; align-items: center; margin-top: 1rem;"></div>
+
+ <div class="rim-brands">
+  <button onclick="showRims('work')">
+    <img src="/Rims/Work/work.jpeg" alt="Work Wheels" />
+  </button>
+
+  <button onclick="showRims('bbs')">
+    <img src="/Rims/BBS/bbs.png" alt="BBS Rims" />
+  </button>
+
+  <button onclick="showRims('enkei')">
+    <img src="/Rims/Enkei/Enkei.jpeg" alt="Enkei" />
+  </button>
+
+  <button onclick="showRims('HRE')">
+    <img src="/Rims/HRE/hre.jpeg" alt="HRE" />
+  </button>
+
+  <button onclick="showRims('Vulk')">
+    <img src="/Rims/Vulk/Vulk.png" alt="Vulk" />
+  </button>
+  </div>
+</div>
+
+
+  <script>
+    const carModel = document.getElementById('carModel');
+    const container = document.getElementById('modelContainer');
+
+    // Load car model from localStorage
+    const carPath = localStorage.getItem('selectedModel');
+    if (carPath) {
+      carModel.setAttribute('src', carPath);
+    }
+
+  const rimsContainer = document.getElementById("rimsPreview");
+
+  function showRims(brand) {
+    rimsContainer.innerHTML = ""; // Clear previous
+
+    const rimsByBrand = {
+      work: [
+        "/Rims/Work/meister.glb",
+        "/Rims/work/equip 5.glb",
+        "/Rims/Work/vs-xx.glb"
+      ],
+      bbs: [
+        "/Rims/BBS/lm.glb",
+        "/Rims/BBS/rs16.glb"
+      ],
+      enkei: [
+        "/Rims/Enkei/nt03.glb"
+      ],
+      hre: [
+        "/models/rims/hre/hre1.glb"
+      ],
+      volk: [
+        "/models/rims/volk/volk1.glb"
+      ]
+    };
+
+    const selectedRims = rimsByBrand[brand.toLowerCase()];
+
+    if (!selectedRims || selectedRims.length === 0) {
+      rimsContainer.innerHTML = "<p style='text-align:center;color:#ccc;'>No rims found for this brand.</p>";
+      return;
+    }
+
+    selectedRims.forEach(path => {
+      const model = document.createElement("model-viewer");
+      model.setAttribute("src", path);
+      model.setAttribute("alt", "Rim Model");
+      model.setAttribute("camera-controls", "");
+      model.setAttribute("shadow-intensity", "1");
+      model.style.width = "200px";
+      model.style.height = "200px";
+      rimsContainer.appendChild(model);
+    });
+  }
+</script>
+
+
+</body>
+</html>

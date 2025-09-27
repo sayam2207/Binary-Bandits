@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Tuning Web App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 500px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .status {
+            background: #4CAF50;
+            color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .api-info {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            text-align: left;
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #5a6fd8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 Car Tuning Web App</h1>
+        <div class="status">
+            ✅ Firebase Backend is Running!
+        </div>
+        <div class="api-info">
+            <h3>API Endpoints:</h3>
+            <p><strong>Health Check:</strong> <a href="/api/health" target="_blank">/api/health</a></p>
+            <p><strong>Firebase Test:</strong> <a href="/api/test-firebase" target="_blank">/api/test-firebase</a></p>
+            <p><strong>Backend URL:</strong> <a href="http://localhost:5000" target="_blank">http://localhost:5000</a></p>
+        </div>
+        <div>
+            <a href="http://localhost:5000/api/health" class="btn" target="_blank">Test API</a>
+            <a href="https://console.firebase.google.com" class="btn" target="_blank">Firebase Console</a>
+        </div>
+        <p><em>Your car tuning application is ready for development!</em></p>
+    </div>
+</body>
+</html>
